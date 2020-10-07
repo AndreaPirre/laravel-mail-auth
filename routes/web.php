@@ -19,3 +19,13 @@ Route::post('/post/update/{id}', 'LoggedController@update')->name('post.update')
 
 
 Route::get('/post/{id}', 'GuestController@show')->name('post.show');
+
+Route::get('/mailable', function() {
+
+    $user = App\User::inRandomOrder() -> first();
+    $post = App\Post::inRandomOrder() -> first();
+    $action = 'DELETE';
+
+    return new App\Mail\UserAction($user, $post, $action);
+
+});

@@ -1,8 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Post;
+use App\Mail\UserAction;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class LoggedController extends Controller
 {
@@ -43,6 +48,12 @@ class LoggedController extends Controller
 
         $post = Post::findOrFail($id);
         $post -> delete();
+
+        $user = Auth::user();
+        $action = "DELETE";
+
+        Mail::to("user@mail.it")->send(new UserAction($user, $post, $action));
+
 
         return redirect() -> route('post.index');
     }
